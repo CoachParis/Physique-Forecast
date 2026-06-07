@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SISS Physique Forecast™ — Coach Paris</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EE;
+    --warm-white: #FAF8F5;
+    --sand: #E8DDD0;
+    --taupe: #C4B5A5;
+    --brown: #8B7260;
+    --deep: #3D2E22;
+    --accent: #C17F5A;
+    --accent-light: #E8C4A8;
+    --green: #6B8C6B;
+    --green-light: #A8C4A8;
+    --red-soft: #C47A6B;
+    --text: #2C1F14;
+    --text-light: #7A6658;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--deep);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--cream);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  header span {
+    font-size: 0.7rem;
+    color: var(--taupe);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: calc(100vh - 64px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--warm-white);
+    border-right: 1px solid var(--sand);
+    padding: 32px 28px;
+    overflow-y: auto;
+  }
+
+  .section-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--deep);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .section-sub {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--sand);
+    margin: 24px 0;
+  }
+
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+
+  input[type="number"], select {
+    background: var(--cream);
+    border: 1px solid var(--sand);
+    border-radius: 6px;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  input[type="number"]:focus, select:focus {
+    border-color: var(--accent);
+  }
+
+  .unit-note {
+    font-size: 0.65rem;
+    color: var(--taupe);
+    margin-top: 2px;
+  }
+
+  /* Nutrition section */
+  .target-indicator {
+    background: var(--cream);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-top: 6px;
+    font-size: 0.7rem;
+    color: var(--text-light);
+    border-left: 2px solid var(--accent);
+    line-height: 1.4;
+  }
+
+  .target-indicator strong {
+    color: var(--deep);
+    font-weight: 500;
+  }
+
+  .target-indicator .status {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 0.62rem;
+    font-weight: 500;
+    margin-left: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .status.optimal  { background: var(--green-light); color: #2a4a2a; }
+  .status.adequate { background: #E8D9A8; color: #5a4a1a; }
+  .status.low      { background: #E8B4A8; color: #5a2a1a; }
+
+  /* Unit toggle */
+  .unit-toggle {
+    display: flex;
+    background: var(--cream);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 20px;
+  }
+
+  .unit-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .unit-btn.active {
+    background: var(--deep);
+    color: var(--cream);
+    font-weight: 500;
+  }
+
+  /* Fat zones checkboxes */
+  .zones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .zone-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    background: var(--cream);
+    border: 1.5px solid var(--sand);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    user-select: none;
+  }
+
+  .zone-chip input { display: none; }
+
+  .zone-chip.active {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--deep);
+    font-weight: 500;
+  }
+
+  .zone-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--taupe);
+    flex-shrink: 0;
+  }
+
+  .zone-chip.active .zone-dot { background: var(--accent); }
+
+  /* Training frequency */
+  .freq-slider {
+    width: 100%;
+    accent-color: var(--accent);
+    height: 4px;
+    cursor: pointer;
+    margin: 8px 0 4px;
+  }
+
+  .freq-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: var(--taupe);
+    letter-spacing: 0.05em;
+  }
+
+  .freq-display {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+    margin: 6px 0 2px;
+  }
+
+  .freq-display span {
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-light);
+  }
+
+  /* Timeframe */
+  .timeframe-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--sand);
+    font-size: 0.75rem;
+    cursor: pointer;
+    background: var(--cream);
+    color: var(--text-light);
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .pill.active {
+    background: var(--deep);
+    border-color: var(--deep);
+    color: var(--cream);
+  }
+
+  /* CTA Button */
+  .generate-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+
+  .generate-btn:hover { background: var(--brown); transform: translateY(-1px); }
+  .generate-btn:active { transform: translateY(0); }
+
+  /* MAIN VISUAL AREA */
+  .visual-area {
+    padding: 36px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .visual-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--sand);
+    padding-bottom: 16px;
+  }
+
+  .visual-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--deep);
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-badge {
+    background: var(--deep);
+    color: var(--cream);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Models container */
+  .models-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    flex: 1;
+  }
+
+  .model-card {
+    background: var(--warm-white);
+    border-radius: 16px;
+    border: 1px solid var(--sand);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .model-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+
+  .model-card.no-action::before { background: var(--red-soft); }
+  .model-card.with-plan::before { background: var(--green); }
+
+  .model-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  .model-card.no-action .model-title { color: var(--red-soft); }
+  .model-card.with-plan .model-title { color: var(--green); }
+
+  .model-sub {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    text-align: center;
+    margin-top: -10px;
+  }
+
+  /* SVG/Canvas Figure */
+  .figure-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .figure-wrap canvas {
+    width: 200px;
+    height: 340px;
+    cursor: grab;
+    border-radius: 8px;
+  }
+
+  .figure-wrap canvas:active { cursor: grabbing; }
+
+  .rotate-hint {
+    font-size: 0.6rem;
+    color: var(--taupe);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    opacity: 0.7;
+  }
+
+  /* Demo presets */
+  .presets-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .preset-btn {
+    padding: 10px 8px;
+    background: var(--warm-white);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    color: var(--deep);
+    transition: all 0.2s;
+    text-align: left;
+    line-height: 1.3;
+  }
+
+  .preset-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+
+  .preset-btn strong {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--deep);
+    margin-bottom: 2px;
+    letter-spacing: 0.02em;
+  }
+
+  .preset-btn .preset-sub {
+    font-size: 0.62rem;
+    color: var(--text-light);
+    letter-spacing: 0.04em;
+  }
+
+  /* Auto-generate button */
+  .auto-gen-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    background: var(--accent-light);
+    color: var(--deep);
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: all 0.2s;
+  }
+
+  .auto-gen-btn:hover {
+    background: var(--accent);
+    color: white;
+  }
+
+  .auto-gen-btn .spark {
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+
+  /* 6-Month Outlook — Coach's signature block */
+  .outlook-card {
+    background: linear-gradient(135deg, var(--deep) 0%, #4D3A2B 100%);
+    border-radius: 14px;
+    padding: 28px 32px;
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .outlook-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 9rem;
+    color: var(--accent);
+    opacity: 0.18;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .outlook-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .outlook-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--accent-light);
+    letter-spacing: 0.06em;
+  }
+
+  .outlook-header .badge {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    background: rgba(255,255,255,0.06);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .outlook-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    position: relative;
+    white-space: pre-wrap;
+  }
+
+  .outlook-signature {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--taupe);
+  }
+
+  /* Client info section */
+  .client-name-input {
+    background: var(--cream);
+    border: 1px solid var(--sand);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--deep);
+    outline: none;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .client-name-input:focus { border-color: var(--accent); }
+
+  textarea.notes-input {
+    width: 100%;
+    min-height: 90px;
+    background: var(--cream);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text);
+    resize: vertical;
+    outline: none;
+    line-height: 1.5;
+  }
+
+  textarea.notes-input:focus { border-color: var(--accent); }
+
+  /* Button group */
+  .btn-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .secondary-btn {
+    padding: 14px;
+    background: transparent;
+    color: var(--deep);
+    border: 1.5px solid var(--deep);
+    border-radius: 8px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .secondary-btn:hover { background: var(--deep); color: var(--cream); }
+  .secondary-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .secondary-btn:disabled:hover { background: transparent; color: var(--deep); }
+
+  /* Print summary header (only visible on print) */
+  .print-header {
+    display: none;
+    text-align: center;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--deep);
+    margin-bottom: 20px;
+  }
+
+  .print-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .print-header .brand {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .print-meta {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 14px 18px;
+    background: var(--warm-white);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+    font-size: 0.85rem;
+  }
+
+  .print-meta strong {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 2px;
+    font-weight: 500;
+  }
+
+  .print-meta .name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--deep); }
+
+  /* Coach notes display block (in results) */
+  .notes-display {
+    background: var(--warm-white);
+    border-radius: 12px;
+    border: 1px solid var(--sand);
+    padding: 20px 24px;
+  }
+
+  .notes-display h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--deep);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .notes-display p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+  /* Lifestyle profile display */
+  .lifestyle-profile {
+    background: var(--warm-white);
+    border-radius: 12px;
+    border: 1px solid var(--sand);
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .profile-item {
+    text-align: center;
+  }
+
+  .profile-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--deep);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .profile-lbl {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+
+  /* PRINT STYLESHEET */
+  @media print {
+    @page {
+      size: letter portrait;
+      margin: 0.5in;
+    }
+
+    body { background: white !important; }
+    header, .sidebar, .empty-state { display: none !important; }
+
+    .layout { display: block !important; }
+    .visual-area { padding: 0 !important; }
+
+    .print-header { display: block !important; }
+    .print-meta { display: grid !important; }
+    .visual-header { display: none !important; }
+
+    .models-container {
+      page-break-inside: avoid;
+      gap: 16px !important;
+    }
+
+    .model-card {
+      box-shadow: none !important;
+      border: 1px solid #ddd !important;
+      padding: 16px !important;
+    }
+
+    .insight-bar {
+      page-break-inside: avoid;
+      background: var(--deep) !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .capacity-note, .notes-display, .lifestyle-profile, .outlook-card {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      page-break-inside: avoid;
+    }
+
+    .figure-wrap canvas { width: 160px !important; height: 270px !important; }
+  }
+
+  /* Info tooltip */
+  .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--taupe);
+    color: var(--cream);
+    font-size: 9px;
+    font-weight: 600;
+    margin-left: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+    vertical-align: middle;
+    font-family: 'DM Sans', sans-serif;
+    position: relative;
+  }
+
+  .info-icon:hover { background: var(--accent); }
+
+  .info-icon .tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--deep);
+    color: var(--cream);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    width: 220px;
+    text-align: left;
+    text-transform: none;
+    box-shadow: 0 6px 20px rgba(61,46,34,0.25);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .info-icon .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--deep);
+  }
+
+  .info-icon:hover .tooltip,
+  .info-icon.show-tooltip .tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .tooltip strong {
+    display: block;
+    font-weight: 500;
+    color: var(--accent-light);
+    margin-bottom: 4px;
+    font-size: 0.72rem;
+  }
+
+  .tooltip .bri-scale {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 0.65rem;
+    color: var(--taupe);
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+
+  .stat-box {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 9px 8px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--deep);
+    line-height: 1;
+  }
+
+  .stat-lbl {
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-top: 3px;
+  }
+
+  /* Insight bar */
+  .insight-bar {
+    background: var(--deep);
+    border-radius: 12px;
+    padding: 20px 28px;
+    color: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .insight-item {}
+
+  .insight-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--accent-light);
+    line-height: 1;
+  }
+
+  .insight-lbl {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-top: 3px;
+  }
+
+  .insight-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.1);
+    align-self: stretch;
+    justify-self: center;
+  }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 60px 20px;
+    color: var(--taupe);
+    text-align: center;
+    flex: 1;
+  }
+
+  .empty-state .big {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    opacity: 0.3;
+  }
+
+  .empty-state p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    max-width: 320px;
+  }
+
+  /* Zone highlight legend */
+  .zone-legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.68rem;
+    color: var(--text-light);
+    letter-spacing: 0.05em;
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Capacity note */
+  .capacity-note {
+    background: linear-gradient(135deg, var(--accent-light) 0%, var(--sand) 100%);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--deep);
+    border-left: 3px solid var(--accent);
+  }
+
+  .capacity-note strong {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .models-container { grid-template-columns: 1fr; }
+    .insight-bar { grid-template-columns: 1fr; }
+    .sidebar { border-right: none; border-bottom: 1px solid var(--sand); }
+    .visual-area { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SISS Physique Forecast™</h1>
+  <span>Stress-Integrated Strength System</span>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR INPUTS -->
+  <aside class="sidebar">
+
+    <div class="unit-toggle">
+      <button class="unit-btn active" id="btn-imperial" onclick="setUnits('imperial')">Imperial</button>
+      <button class="unit-btn" id="btn-metric" onclick="setUnits('metric')">Metric</button>
+    </div>
+
+    <div class="section-label">Demo Presets</div>
+    <div class="section-sub">Quick-fill for events & content</div>
+
+    <div class="presets-grid">
+      <button class="preset-btn" onclick="applyPreset('highAchiever')">
+        <strong>High-Achiever</strong>
+        <span class="preset-sub">Stressed · Sedentary · 36</span>
+      </button>
+      <button class="preset-btn" onclick="applyPreset('perimenopausal')">
+        <strong>Perimenopausal</strong>
+        <span class="preset-sub">Training but stuck · 47</span>
+      </button>
+      <button class="preset-btn" onclick="applyPreset('overtrainer')">
+        <strong>Overtrainer</strong>
+        <span class="preset-sub">Burnout · No capacity · 32</span>
+      </button>
+      <button class="preset-btn" onclick="applyPreset('beginner')">
+        <strong>Beginner</strong>
+        <span class="preset-sub">Starting from zero · 41</span>
+      </button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Client Info</div>
+    <div class="section-sub">For consultation record</div>
+
+    <div class="input-group">
+      <label>Client Name</label>
+      <input type="text" class="client-name-input" id="client-name" placeholder="First & Last Name">
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Age</label>
+        <input type="number" id="age" placeholder="35" min="16" max="85">
+        <div class="unit-note">years</div>
+      </div>
+      <div class="input-group">
+        <label>Daily Activity</label>
+        <select id="activity">
+          <option value="sedentary">Sedentary (desk job)</option>
+          <option value="light" selected>Lightly Active</option>
+          <option value="moderate">Moderately Active</option>
+          <option value="very">Very Active</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Client Measurements</div>
+    <div class="section-sub">Current baseline</div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Height</label>
+        <input type="number" id="height" placeholder="65" min="48" max="84">
+        <div class="unit-note unit-height">inches</div>
+      </div>
+      <div class="input-group">
+        <label>Weight</label>
+        <input type="number" id="weight" placeholder="165" min="80" max="400" oninput="updateTargets()">
+        <div class="unit-note unit-weight">lbs</div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Waist</label>
+        <input type="number" id="waist" placeholder="34" min="20" max="70">
+        <div class="unit-note unit-length">inches</div>
+      </div>
+      <div class="input-group">
+        <label>Hips</label>
+        <input type="number" id="hips" placeholder="42" min="25" max="80">
+        <div class="unit-note unit-length">inches</div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Upper Arm</label>
+        <input type="number" id="arms" placeholder="14" min="8" max="30">
+        <div class="unit-note unit-length">inches</div>
+      </div>
+      <div class="input-group">
+        <label>Thigh</label>
+        <input type="number" id="thighs" placeholder="24" min="12" max="45">
+        <div class="unit-note unit-length">inches</div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Forearm</label>
+        <input type="number" id="forearms" placeholder="10" min="6" max="22">
+        <div class="unit-note unit-length">inches</div>
+      </div>
+      <div class="input-group">
+        <label>Calf</label>
+        <input type="number" id="calves" placeholder="14" min="9" max="28">
+        <div class="unit-note unit-length">inches</div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Current Training Frequency</label>
+      <select id="current-freq">
+        <option value="0">0 days/week — Not training</option>
+        <option value="1">1 day/week</option>
+        <option value="2" selected>2 days/week</option>
+        <option value="3">3 days/week</option>
+        <option value="4">4 days/week</option>
+        <option value="5">5 days/week</option>
+      </select>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Avg Sleep</label>
+        <input type="number" id="sleep" placeholder="7" min="3" max="12" step="0.5">
+        <div class="unit-note">hours/night</div>
+      </div>
+      <div class="input-group">
+        <label>Stress Level</label>
+        <select id="stress">
+          <option value="low">Low</option>
+          <option value="moderate" selected>Moderate</option>
+          <option value="high">High</option>
+          <option value="very-high">Very High</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Nutrition & Hydration</div>
+    <div class="section-sub">Daily intake averages</div>
+
+    <div class="input-group">
+      <label>Daily Protein Intake</label>
+      <input type="number" id="protein" placeholder="80" min="20" max="400" oninput="updateTargets()">
+      <div class="unit-note unit-protein">grams</div>
+      <div class="target-indicator" id="protein-target">
+        Enter weight to see target
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Daily Water Intake</label>
+      <input type="number" id="water" placeholder="48" min="0" max="300" oninput="updateTargets()">
+      <div class="unit-note unit-water">oz</div>
+      <div class="target-indicator" id="water-target">
+        Enter weight to see target
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Fat Zone Areas</div>
+    <div class="section-sub">Select all that apply</div>
+
+    <div class="zones-grid" id="zones-grid">
+      <label class="zone-chip" onclick="toggleZone(this, 'belly')">
+        <div class="zone-dot"></div> Belly / Abs
+      </label>
+      <label class="zone-chip" onclick="toggleZone(this, 'waist')">
+        <div class="zone-dot"></div> Waist / Sides
+      </label>
+      <label class="zone-chip" onclick="toggleZone(this, 'hips')">
+        <div class="zone-dot"></div> Hips / Glutes
+      </label>
+      <label class="zone-chip" onclick="toggleZone(this, 'thighs')">
+        <div class="zone-dot"></div> Inner Thighs
+      </label>
+      <label class="zone-chip" onclick="toggleZone(this, 'arms')">
+        <div class="zone-dot"></div> Arms / Triceps
+      </label>
+      <label class="zone-chip" onclick="toggleZone(this, 'back')">
+        <div class="zone-dot"></div> Back / Bra Line
+      </label>
+      <label class="zone-chip" onclick="toggleZone(this, 'chest')">
+        <div class="zone-dot"></div> Chest / Pecs
+      </label>
+      <label class="zone-chip" onclick="toggleZone(this, 'calves')">
+        <div class="zone-dot"></div> Calves / Ankles
+      </label>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">SISS Plan Training Days</div>
+    <div class="section-sub">Projected frequency with structured plan</div>
+
+    <div class="freq-display" id="freq-display">3 <span>days/week</span></div>
+    <input type="range" class="freq-slider" id="plan-freq" min="2" max="5" value="3" oninput="updateFreq()">
+    <div class="freq-labels">
+      <span>2x</span><span>3x</span><span>4x</span><span>5x</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Projection Timeframe</div>
+    <div class="section-sub">How far ahead to model</div>
+
+    <div class="timeframe-pills" id="timeframe-pills">
+      <div class="pill" onclick="setTimeframe(0.92, '4 Week Outlook', this)">4 Weeks</div>
+      <div class="pill" onclick="setTimeframe(3, '3 Month Outlook', this)">3 Months</div>
+      <div class="pill active" onclick="setTimeframe(6, '6 Month Outlook', this)">6 Months</div>
+      <div class="pill" onclick="setTimeframe(12, '12 Month Outlook', this)">1 Year</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Coach's 6-Month Outlook</div>
+    <div class="section-sub">Auto-drafted from inputs · fully editable</div>
+
+    <button class="auto-gen-btn" onclick="autoGenerateOutlook()">
+      <span class="spark">✦</span> Auto-Generate Draft
+    </button>
+
+    <textarea class="notes-input" id="six-month-outlook" placeholder="Click 'Auto-Generate Draft' after entering client data, or write from scratch..."></textarea>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Coach Notes</div>
+    <div class="section-sub">Optional — additional observations & next steps</div>
+
+    <textarea class="notes-input" id="coach-notes" placeholder="Follow-up date, specific recommendations, things to watch for..."></textarea>
+
+    <div class="divider"></div>
+
+    <button class="generate-btn" onclick="generate()">Generate Projection →</button>
+
+    <div class="btn-row">
+      <button class="secondary-btn" id="print-btn" onclick="printSummary()" disabled>Print / Save PDF</button>
+      <button class="secondary-btn" onclick="resetForm()">Reset Form</button>
+    </div>
+
+  </aside>
+
+  <!-- VISUAL MAIN AREA -->
+  <main class="visual-area" id="main-visual">
+
+    <div class="empty-state" id="empty-state">
+      <div class="big">◎</div>
+      <p>Enter your client's measurements, select their fat zones, set their training frequency, and generate a projection.</p>
+      <p style="font-size:0.72rem; margin-top:4px; opacity:0.7;">The visualizer will show two paths — no action and with a structured SISS plan.</p>
+    </div>
+
+    <div id="results" style="display:none; flex-direction:column; gap:24px;">
+
+      <!-- Print-only header -->
+      <div class="print-header">
+        <div class="brand">SISS Physique Forecast™</div>
+        <h1>Consultation Summary</h1>
+      </div>
+
+      <!-- Print-only client meta -->
+      <div class="print-meta" id="print-meta">
+        <div>
+          <strong>Client</strong>
+          <span class="name" id="meta-name">—</span>
+        </div>
+        <div style="text-align: right;">
+          <strong>Consultation Date</strong>
+          <span class="name" id="meta-date">—</span>
+        </div>
+      </div>
+
+      <div class="visual-header">
+        <h2>Body Projection Analysis</h2>
+        <div class="timeline-badge" id="timeline-badge">6 Month Outlook</div>
+      </div>
+
+      <!-- Lifestyle profile snapshot -->
+      <div class="lifestyle-profile" id="lifestyle-profile"></div>
+
+      <div class="models-container">
+
+        <!-- NO ACTION -->
+        <div class="model-card no-action">
+          <div class="model-title">Path of No Action</div>
+          <div class="model-sub" id="no-action-sub">At current rate · 2x/week</div>
+          <div class="figure-wrap">
+            <canvas id="canvas-no-action"></canvas>
+            <div class="rotate-hint">↔ Drag to rotate</div>
+          </div>
+          <div class="stats-grid" id="stats-no-action"></div>
+        </div>
+
+        <!-- WITH PLAN -->
+        <div class="model-card with-plan">
+          <div class="model-title">With Your SISS Plan</div>
+          <div class="model-sub" id="with-plan-sub">Structured training · 3x/week</div>
+          <div class="figure-wrap">
+            <canvas id="canvas-with-plan"></canvas>
+            <div class="rotate-hint">↔ Drag to rotate</div>
+          </div>
+          <div class="stats-grid" id="stats-with-plan"></div>
+        </div>
+
+      </div>
+
+      <!-- INSIGHT BAR -->
+      <div class="insight-bar">
+        <div class="insight-item">
+          <div class="insight-val" id="insight-weight-diff">—</div>
+          <div class="insight-lbl">Projected Weight Diff</div>
+        </div>
+        <div class="insight-divider"></div>
+        <div class="insight-item">
+          <div class="insight-val" id="insight-waist-diff">—</div>
+          <div class="insight-lbl">Waist Inch Difference</div>
+        </div>
+        <div class="insight-divider"></div>
+        <div class="insight-item">
+          <div class="insight-val" id="insight-freq-impact">—</div>
+          <div class="insight-lbl">Days/Week Impact Factor</div>
+        </div>
+      </div>
+
+      <!-- COACH'S 6-MONTH OUTLOOK — featured assessment -->
+      <div class="outlook-card" id="outlook-card" style="display: none;">
+        <div class="outlook-header">
+          <h3>Coach's 6-Month Outlook</h3>
+          <span class="badge">Professional Assessment</span>
+        </div>
+        <div class="outlook-body" id="outlook-content"></div>
+        <div class="outlook-signature">— Coach Paris · SISS Physique Forecast™</div>
+      </div>
+
+      <!-- CAPACITY NOTE -->
+      <div class="capacity-note">
+        <strong>Training + Nutrition Note</strong>
+        These projections factor in training frequency, protein intake (0.8–1g per lb bodyweight target), and hydration (½ bodyweight in oz). Training alone won't produce these results — diet and recovery are equal contributors. The SISS method accounts for nervous system capacity: sustainable consistency beats inconsistent intensity every time.
+      </div>
+
+      <!-- Coach Notes (only renders if filled in) -->
+      <div class="notes-display" id="notes-display" style="display: none;">
+        <h4>Coach's Recommendations & Notes</h4>
+        <p id="notes-content"></p>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // Zone state
+  const selectedZones = new Set();
+  let timeframe = 6;
+  let timeframeLabel = '6 Month Outlook';
+  let planFreq = 3;
+  let unitSystem = 'imperial'; // 'imperial' or 'metric'
+
+  // ─── UNIT CONVERSIONS ─────────────────────────────────────────────────────
+  const IN_TO_CM = 2.54;
+  const LB_TO_KG = 0.453592;
+
+  function inToCm(v) { return v * IN_TO_CM; }
+  function cmToIn(v) { return v / IN_TO_CM; }
+  function lbToKg(v) { return v * LB_TO_KG; }
+  function kgToLb(v) { return v / LB_TO_KG; }
+
+  // Imperial placeholders
+  const PLACEHOLDERS = {
+    imperial: { height: 65, weight: 165, waist: 34, hips: 42, arms: 14, thighs: 24, forearms: 10, calves: 14, protein: 80, water: 48 },
+    metric:   { height: 165, weight: 75, waist: 86, hips: 107, arms: 36, thighs: 61, forearms: 25, calves: 36, protein: 80, water: 1400 }
+  };
+
+  function setUnits(system) {
+    if (unitSystem === system) return;
+
+    // Read current values and convert
+    const measureFields = ['height', 'weight', 'waist', 'hips', 'arms', 'thighs', 'forearms', 'calves'];
+    measureFields.forEach(id => {
+      const el = document.getElementById(id);
+      const v = parseFloat(el.value);
+      if (!isNaN(v)) {
+        if (system === 'metric' && unitSystem === 'imperial') {
+          el.value = (id === 'weight' ? lbToKg(v) : inToCm(v)).toFixed(1);
+        } else if (system === 'imperial' && unitSystem === 'metric') {
+          el.value = (id === 'weight' ? kgToLb(v) : cmToIn(v)).toFixed(1);
+        }
+      }
+    });
+
+    // Convert water (oz ↔ ml)
+    const waterEl = document.getElementById('water');
+    const wv = parseFloat(waterEl.value);
+    if (!isNaN(wv)) {
+      if (system === 'metric' && unitSystem === 'imperial') {
+        waterEl.value = (wv * 29.5735).toFixed(0); // oz to ml
+      } else if (system === 'imperial' && unitSystem === 'metric') {
+        waterEl.value = (wv / 29.5735).toFixed(1); // ml to oz
+      }
+    }
+    // Protein stays in grams either way
+
+    unitSystem = system;
+
+    // Update toggle buttons
+    document.getElementById('btn-imperial').classList.toggle('active', system === 'imperial');
+    document.getElementById('btn-metric').classList.toggle('active', system === 'metric');
+
+    // Update unit labels
+    const lengthLbl = system === 'imperial' ? 'inches' : 'cm';
+    document.querySelectorAll('.unit-length').forEach(el => el.textContent = lengthLbl);
+    document.querySelectorAll('.unit-height').forEach(el => el.textContent = lengthLbl);
+    document.querySelectorAll('.unit-weight').forEach(el => el.textContent = system === 'imperial' ? 'lbs' : 'kg');
+    document.querySelectorAll('.unit-water').forEach(el => el.textContent = system === 'imperial' ? 'oz' : 'ml');
+    document.querySelectorAll('.unit-protein').forEach(el => el.textContent = 'grams');
+
+    // Update placeholders
+    const p = PLACEHOLDERS[system];
+    [...measureFields, 'protein', 'water'].forEach(id => {
+      document.getElementById(id).placeholder = p[id];
+    });
+
+    updateTargets();
+
+    // Update input min/max ranges
+    if (system === 'metric') {
+      document.getElementById('height').min = 120;  document.getElementById('height').max = 215;
+      document.getElementById('weight').min = 36;   document.getElementById('weight').max = 180;
+      document.getElementById('waist').min  = 50;   document.getElementById('waist').max  = 180;
+      document.getElementById('hips').min   = 60;   document.getElementById('hips').max   = 200;
+      document.getElementById('arms').min   = 20;   document.getElementById('arms').max   = 75;
+      document.getElementById('thighs').min = 30;   document.getElementById('thighs').max = 115;
+      document.getElementById('forearms').min = 15; document.getElementById('forearms').max = 55;
+      document.getElementById('calves').min   = 22; document.getElementById('calves').max   = 70;
+    } else {
+      document.getElementById('height').min = 48;   document.getElementById('height').max = 84;
+      document.getElementById('weight').min = 80;   document.getElementById('weight').max = 400;
+      document.getElementById('waist').min  = 20;   document.getElementById('waist').max  = 70;
+      document.getElementById('hips').min   = 25;   document.getElementById('hips').max   = 80;
+      document.getElementById('arms').min   = 8;    document.getElementById('arms').max   = 30;
+      document.getElementById('thighs').min = 12;   document.getElementById('thighs').max = 45;
+      document.getElementById('forearms').min = 6;  document.getElementById('forearms').max = 22;
+      document.getElementById('calves').min   = 9;  document.getElementById('calves').max   = 28;
+    }
+  }
+
+  // ─── BMI & BRI CALCULATIONS ──────────────────────────────────────────────
+  // BMI (imperial): (weight_lbs / height_in²) × 703
+  function calcBMI(weightLbs, heightIn) {
+    return (weightLbs / (heightIn * heightIn)) * 703;
+  }
+
+  // BRI (Body Roundness Index): uses height + waist circumference
+  // Formula: 364.2 − 365.5 × √(1 − (WC / (π × H))²)
+  // Units must match between WC and H — using inches for both
+  function calcBRI(waistIn, heightIn) {
+    const ratio = waistIn / (Math.PI * heightIn);
+    const inner = 1 - (ratio * ratio);
+    if (inner < 0) return 0;
+    return 364.2 - 365.5 * Math.sqrt(inner);
+  }
+
+  // BRI categories based on quintile research
+  function getBRICategory(bri) {
+    if (bri < 3.41) return { label: 'Lean', color: '#6B8C6B' };
+    if (bri < 4.45) return { label: 'Average', color: '#8FAB6B' };
+    if (bri < 5.46) return { label: 'Above Avg', color: '#C4A85A' };
+    if (bri < 6.91) return { label: 'High',     color: '#C17F5A' };
+    return                  { label: 'Very High',color: '#C47A6B' };
+  }
+
+  // ─── NUTRITION TARGETS ───────────────────────────────────────────────────
+  // Recalculate protein and water targets based on current weight input
+  function updateTargets() {
+    let weightVal = parseFloat(document.getElementById('weight').value);
+    if (isNaN(weightVal)) {
+      document.getElementById('protein-target').innerHTML = 'Enter weight to see target';
+      document.getElementById('water-target').innerHTML = 'Enter weight to see target';
+      return;
+    }
+
+    // Convert to lbs for target math
+    const weightLbs = unitSystem === 'metric' ? kgToLb(weightVal) : weightVal;
+
+    // Protein target: 0.8-1g per lb bodyweight
+    const proteinMin = Math.round(weightLbs * 0.8);
+    const proteinMax = Math.round(weightLbs * 1.0);
+
+    // Water target: half bodyweight in oz (or convert to ml for metric)
+    const waterOz = Math.round(weightLbs * 0.5);
+    const waterDisp = unitSystem === 'metric' ? `${Math.round(waterOz * 29.5735)} ml` : `${waterOz} oz`;
+
+    // Current intake status
+    const proteinInput = parseFloat(document.getElementById('protein').value);
+    const waterInput = parseFloat(document.getElementById('water').value);
+
+    let proteinStatus = '';
+    if (!isNaN(proteinInput)) {
+      if (proteinInput >= proteinMin) {
+        proteinStatus = '<span class="status optimal">✓ Optimal</span>';
+      } else if (proteinInput >= proteinMin * 0.75) {
+        proteinStatus = '<span class="status adequate">Adequate</span>';
+      } else {
+        proteinStatus = '<span class="status low">Below target</span>';
+      }
+    }
+
+    let waterStatus = '';
+    if (!isNaN(waterInput)) {
+      const waterOzInput = unitSystem === 'metric' ? waterInput / 29.5735 : waterInput;
+      if (waterOzInput >= waterOz) {
+        waterStatus = '<span class="status optimal">✓ Optimal</span>';
+      } else if (waterOzInput >= waterOz * 0.75) {
+        waterStatus = '<span class="status adequate">Adequate</span>';
+      } else {
+        waterStatus = '<span class="status low">Below target</span>';
+      }
+    }
+
+    document.getElementById('protein-target').innerHTML = `
+      <strong>Target: ${proteinMin}–${proteinMax}g</strong> (0.8–1g per lb bodyweight) ${proteinStatus}
+    `;
+    document.getElementById('water-target').innerHTML = `
+      <strong>Target: ${waterDisp}</strong> (½ bodyweight in oz) ${waterStatus}
+    `;
+  }
+
+  function toggleZone(el, zone) {
+    el.classList.toggle('active');
+    if (selectedZones.has(zone)) {
+      selectedZones.delete(zone);
+    } else {
+      selectedZones.add(zone);
+    }
+  }
+
+  function updateFreq() {
+    planFreq = parseInt(document.getElementById('plan-freq').value);
+    document.getElementById('freq-display').innerHTML = `${planFreq} <span>days/week</span>`;
+  }
+
+  function setTimeframe(months, label, el) {
+    timeframe = months;
+    timeframeLabel = label;
+    document.querySelectorAll('.timeframe-pills .pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ─── PROJECTIONS ENGINE ──────────────────────────────────────────────────────
+
+  function calcProjections(measurements, currentFreq, planFreqDays, months, nutrition, lifestyle) {
+    const { weight, waist, hips, arms, thighs, forearms, calves } = measurements;
+    const { protein, water } = nutrition;
+    const { age, sleep, stress, activity } = lifestyle;
+
+    // ── Nutrition multipliers ──
+    const proteinTarget = weight * 0.9;
+    const proteinRatio = Math.max(0.4, Math.min(1.15, protein / proteinTarget));
+    const waterTarget = weight * 0.5;
+    const waterRatio = Math.max(0.7, Math.min(1.05, water / waterTarget));
+    const nutritionFactor = (proteinRatio * 0.75) + (waterRatio * 0.25);
+
+    // ── Age factor (metabolic + hormonal reality) ──
+    let ageFactor;
+    if (age < 30)      ageFactor = 1.00;
+    else if (age < 40) ageFactor = 0.92;
+    else if (age < 50) ageFactor = 0.83;  // perimenopause begins
+    else if (age < 60) ageFactor = 0.75;  // menopause window
+    else               ageFactor = 0.68;
+
+    // ── Sleep factor (recovery + cortisol) ──
+    let sleepFactor;
+    if (sleep < 5)      sleepFactor = 0.55;
+    else if (sleep < 6) sleepFactor = 0.72;
+    else if (sleep < 7) sleepFactor = 0.88;
+    else if (sleep <= 9) sleepFactor = 1.00;
+    else                sleepFactor = 0.92;
+
+    // ── Stress factor ──
+    const stressMap = { 'low': 1.00, 'moderate': 0.90, 'high': 0.75, 'very-high': 0.60 };
+    const stressFactor = stressMap[stress] || 0.90;
+
+    // ── Activity factor (NEAT — non-exercise activity) ──
+    const activityMap = { 'sedentary': 0.85, 'light': 0.95, 'moderate': 1.00, 'very': 1.08 };
+    const activityFactor = activityMap[activity] || 0.95;
+
+    // ── Combined lifestyle factor ──
+    // Sleep & stress matter most for women's body composition (cortisol cascade)
+    const lifestyleFactor = (sleepFactor * 0.35) + (stressFactor * 0.30) + (activityFactor * 0.20) + (ageFactor * 0.15);
+
+    // ── No-Action path ──
+    // Poor lifestyle + poor nutrition + no training = compounding decline
+    const nutritionPenalty = nutritionFactor < 0.85 ? (0.85 - nutritionFactor) : 0;
+    const lifestylePenalty = lifestyleFactor < 0.85 ? (0.85 - lifestyleFactor) * 1.2 : 0;
+    const noActionGainFactor = (currentFreq === 0 ? 1.0 : currentFreq <= 2 ? 0.4 : 0.1) + nutritionPenalty + lifestylePenalty;
+    const noActionLossFactor = (currentFreq === 0 ? 0 : currentFreq <= 2 ? 0.3 : 0.5) * Math.min(1, nutritionFactor) * Math.min(1, lifestyleFactor);
+
+    const noWeightDelta   = (noActionGainFactor * 0.6 - noActionLossFactor * 0.3) * months;
+    const noWaistDelta    = (noActionGainFactor * 0.15 - noActionLossFactor * 0.08) * months;
+    const noHipsDelta     = (noActionGainFactor * 0.12 - noActionLossFactor * 0.06) * months;
+    const noArmsDelta     = (noActionGainFactor * 0.08 - noActionLossFactor * 0.04) * months;
+    const noThighsDelta   = (noActionGainFactor * 0.10 - noActionLossFactor * 0.05) * months;
+    const noForearmsDelta = (noActionGainFactor * 0.04 - noActionLossFactor * 0.02) * months;
+    const noCalvesDelta   = (noActionGainFactor * 0.06 - noActionLossFactor * 0.03) * months;
+
+    // ── With SISS Plan ──
+    // Plan addresses sleep + stress through SISS pillars, so lifestyle factor partially recovers
+    const planLifestyleFactor = Math.min(1.05, lifestyleFactor * 0.4 + 0.65);
+    const planNutritionFactor = Math.min(1.15, nutritionFactor * 0.4 + 0.75);
+
+    const freqScale = {2: 0.55, 3: 0.75, 4: 0.90, 5: 1.0}[planFreqDays] || 0.75;
+    const totalPlanFactor = freqScale * planNutritionFactor * planLifestyleFactor;
+
+    const baseWeightLossPerMonth   = 1.8;
+    const baseWaistPerMonth        = 0.38;
+    const baseHipsPerMonth         = 0.30;
+    const baseArmsPerMonth         = 0.22;
+    const baseThighsPerMonth       = 0.28;
+    const baseForearmsPerMonth     = 0.10;
+    const baseCalvesPerMonth       = 0.15;
+
+    const planWeightDelta   = -(baseWeightLossPerMonth * totalPlanFactor * months);
+    const planWaistDelta    = -(baseWaistPerMonth * totalPlanFactor * months);
+    const planHipsDelta     = -(baseHipsPerMonth * totalPlanFactor * months);
+    const planArmsDelta     = -(baseArmsPerMonth * totalPlanFactor * months);
+    const planThighsDelta   = -(baseThighsPerMonth * totalPlanFactor * months);
+    const planForearmsDelta = -(baseForearmsPerMonth * totalPlanFactor * months);
+    const planCalvesDelta   = -(baseCalvesPerMonth * totalPlanFactor * months);
+
+    return {
+      noAction: {
+        weight:   weight + noWeightDelta,
+        waist:    waist + noWaistDelta,
+        hips:     hips + noHipsDelta,
+        arms:     arms + noArmsDelta,
+        thighs:   thighs + noThighsDelta,
+        forearms: forearms + noForearmsDelta,
+        calves:   calves + noCalvesDelta,
+      },
+      withPlan: {
+        weight:   weight + planWeightDelta,
+        waist:    waist + planWaistDelta,
+        hips:     hips + planHipsDelta,
+        arms:     arms + planArmsDelta,
+        thighs:   thighs + planThighsDelta,
+        forearms: forearms + planForearmsDelta,
+        calves:   calves + planCalvesDelta,
+      },
+      nutritionFactor,
+      lifestyleFactor,
+      ageFactor,
+      sleepFactor,
+      stressFactor,
+      activityFactor
+    };
+  }
+
+  // ─── SVG FIGURE BUILDER ─────────────────────────────────────────────────────
+  // Draws a woman silhouette; zones scale based on measurements
+  // measurements: { waist, hips, arms, thighs } — relative to baseline
+
+  // ─── 3D BODY MODEL (Three.js) ────────────────────────────────────────────
+  let modelLeft = null;
+  let modelRight = null;
+  let globalRot = 0;
+  let isDrag = false;
+  let dragX = 0;
+
+  class BodyModel3D {
+    constructor(canvasId, colorScheme) {
+      this.canvas = document.getElementById(canvasId);
+      this.scheme = colorScheme;
+
+      const w = 200, h = 340;
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.PerspectiveCamera(32, w / h, 0.1, 100);
+      this.camera.position.set(0, 3.2, 15);
+      this.camera.lookAt(0, 2.8, 0);
+
+      this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true, antialias: true });
+      this.renderer.setSize(w, h);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.renderer.setClearColor(0x000000, 0);
+
+      // Lighting
+      this.scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+      const dir = new THREE.DirectionalLight(0xffffff, 0.7);
+      dir.position.set(4, 6, 5);
+      this.scene.add(dir);
+      const back = new THREE.DirectionalLight(0xffffff, 0.3);
+      back.position.set(-3, 4, -5);
+      this.scene.add(back);
+      const rim = new THREE.DirectionalLight(0xffffff, 0.2);
+      rim.position.set(0, 1, -6);
+      this.scene.add(rim);
+
+      this.body = new THREE.Group();
+      this.scene.add(this.body);
+    }
+
+    clear() {
+      while (this.body.children.length) {
+        const c = this.body.children[0];
+        if (c.geometry) c.geometry.dispose();
+        if (c.material) c.material.dispose();
+        this.body.remove(c);
+      }
+    }
+
+    build(m, zones) {
+      this.clear();
+      const base = { waist: 34, hips: 42, arms: 13, thighs: 23, forearms: 10, calves: 14, weight: 160 };
+      const wR  = Math.max(0.7, Math.min(1.5, m.waist / base.waist));
+      const hR  = Math.max(0.7, Math.min(1.5, m.hips / base.hips));
+      const aR  = Math.max(0.7, Math.min(1.5, m.arms / base.arms));
+      const tR  = Math.max(0.7, Math.min(1.5, m.thighs / base.thighs));
+      const fR  = Math.max(0.7, Math.min(1.5, (m.forearms || base.forearms) / base.forearms));
+      const cR  = Math.max(0.7, Math.min(1.5, (m.calves || base.calves) / base.calves));
+      const wtR = Math.max(0.8, Math.min(1.4, m.weight / base.weight));
+
+      // Colors
+      const bodyHex = this.scheme === 'red' ? 0xD4A09A : 0x9AB8A0;
+      const darkHex = this.scheme === 'red' ? 0xB5695C : 0x5A7A5A;
+      const zoneHex = this.scheme === 'red' ? 0xC47A6B : 0x6B8C6B;
+
+      const bodyMat = new THREE.MeshPhongMaterial({ color: bodyHex, shininess: 20, specular: 0x333333 });
+      const darkMat = new THREE.MeshPhongMaterial({ color: darkHex, shininess: 10 });
+      const zoneMat = new THREE.MeshPhongMaterial({ color: zoneHex, transparent: true, opacity: 0.35, side: THREE.DoubleSide });
+
+      // ── Torso proportions ──
+      const neckR    = 0.22;
+      const shouldW  = 0.55 * (0.85 + wtR * 0.17);
+      const chestW   = shouldW * 0.92;
+      const waistW   = 0.38 * wR;
+      const hipW     = 0.58 * hR;
+
+      // Smooth profile from bottom to top
+      const tp = [
+        [hipW * 0.7,   -2.0],
+        [hipW * 0.9,   -1.6],
+        [hipW,         -1.1],
+        [hipW * 0.92,  -0.7],
+        [waistW * 1.08, -0.3],
+        [waistW,        0.0],
+        [waistW * 1.05,  0.35],
+        [chestW * 0.82,  0.8],
+        [chestW * 1.02,  1.15],
+        [chestW * 0.94,  1.5],
+        [shouldW,        1.9],
+        [shouldW * 0.65, 2.25],
+        [neckR * 1.1,    2.45],
+        [neckR,          2.65],
+        [neckR * 0.9,    2.85],
+      ].map(p => new THREE.Vector2(p[0], p[1]));
+
+      const torsoGeo = new THREE.LatheGeometry(tp, 32);
+      const torso = new THREE.Mesh(torsoGeo, bodyMat);
+      torso.position.y = 3.0;
+      this.body.add(torso);
+
+      // ── Head ──
+      const headR = 0.42;
+      const headGeo = new THREE.SphereGeometry(headR, 24, 20);
+      const head = new THREE.Mesh(headGeo, bodyMat);
+      head.position.set(0, 6.25, 0);
+      head.scale.set(1, 1.08, 0.95);
+      this.body.add(head);
+
+      // Hair
+      const hairGeo = new THREE.SphereGeometry(headR * 1.05, 24, 12, 0, Math.PI * 2, 0, Math.PI * 0.55);
+      const hair = new THREE.Mesh(hairGeo, darkMat);
+      hair.position.set(0, 6.3, -0.02);
+      this.body.add(hair);
+
+      // ── Legs ──
+      const thighW   = 0.3 * tR;
+      const kneeR_v  = 0.2;
+      const calfW    = 0.22 * cR;
+      const ankleR_v = 0.12;
+      const legGap   = thighW * 0.55 + 0.08;
+
+      const legPts = [
+        [ankleR_v,       0],
+        [ankleR_v * 1.1, 0.15],
+        [calfW * 0.92,   0.5],
+        [calfW,          0.85],
+        [calfW * 0.82,   1.15],
+        [kneeR_v,        1.45],
+        [kneeR_v * 1.08, 1.65],
+        [thighW * 0.82,  2.05],
+        [thighW,         2.5],
+        [thighW * 0.95,  2.8],
+        [thighW * 0.8,   3.05],
+      ].map(p => new THREE.Vector2(p[0], p[1]));
+
+      [-1, 1].forEach(side => {
+        const legGeo = new THREE.LatheGeometry(legPts, 16);
+        const leg = new THREE.Mesh(legGeo, bodyMat);
+        leg.position.set(side * legGap, 0, 0);
+        this.body.add(leg);
+      });
+
+      // ── Arms ──
+      const armW_v     = 0.15 * aR;
+      const forearmW_v = 0.12 * fR;
+      const wristR_v   = 0.08;
+      const armOffset  = shouldW + armW_v * 0.3;
+
+      const armPts = [
+        [wristR_v,         0],
+        [wristR_v * 1.15,  0.12],
+        [forearmW_v * 0.9, 0.45],
+        [forearmW_v,       0.75],
+        [forearmW_v * 0.82, 1.0],
+        [forearmW_v * 0.72, 1.1],
+        [armW_v * 0.78,    1.35],
+        [armW_v,           1.7],
+        [armW_v * 0.92,    2.0],
+        [armW_v * 0.65,    2.2],
+      ].map(p => new THREE.Vector2(p[0], p[1]));
+
+      [-1, 1].forEach(side => {
+        const armGeo = new THREE.LatheGeometry(armPts, 12);
+        const arm = new THREE.Mesh(armGeo, bodyMat);
+        arm.position.set(side * armOffset, 3.15, 0);
+        arm.rotation.z = side * 0.12;
+        this.body.add(arm);
+      });
+
+      // ── Fat zone highlights ──
+      const addZone = (px, py, pz, sx, sy, sz) => {
+        const g = new THREE.SphereGeometry(1, 16, 12);
+        const mesh = new THREE.Mesh(g, zoneMat);
+        mesh.position.set(px, py, pz);
+        mesh.scale.set(sx, sy, sz);
+        this.body.add(mesh);
+      };
+
+      if (zones.has('belly') || zones.has('waist')) {
+        addZone(0, 3.0, 0, waistW * 2.4, 0.6, waistW * 1.8);
+      }
+      if (zones.has('hips')) {
+        addZone(0, 1.85, 0, hipW * 2.0, 0.65, hipW * 1.7);
+      }
+      if (zones.has('thighs')) {
+        const tMid = 1.5;
+        [-1, 1].forEach(s => addZone(s * legGap, tMid, 0, thighW * 2.0, 0.7, thighW * 1.6));
+      }
+      if (zones.has('arms')) {
+        [-1, 1].forEach(s => addZone(s * armOffset, 4.65, 0, armW_v * 2.8, 0.55, armW_v * 2.2));
+      }
+      if (zones.has('chest')) {
+        addZone(0, 4.2, 0.05, chestW * 1.8, 0.45, chestW * 1.3);
+      }
+      if (zones.has('back')) {
+        addZone(0, 4.9, -0.15, shouldW * 1.5, 0.5, shouldW * 1.0);
+      }
+      if (zones.has('calves')) {
+        [-1, 1].forEach(s => addZone(s * legGap, 0.85, 0, calfW * 2.2, 0.45, calfW * 1.8));
+      }
+
+      this.render();
+    }
+
+    render() {
+      this.body.rotation.y = globalRot;
+      this.renderer.render(this.scene, this.camera);
+    }
+  }
+
+  // ── Drag-to-rotate (synced across both models) ──
+  function initDrag() {
+    document.querySelectorAll('.figure-wrap').forEach(wrap => {
+      wrap.addEventListener('mousedown', onDragStart);
+      wrap.addEventListener('touchstart', onDragStart, { passive: false });
+    });
+    window.addEventListener('mousemove', onDragMove);
+    window.addEventListener('touchmove', onDragMove, { passive: false });
+    window.addEventListener('mouseup', onDragEnd);
+    window.addEventListener('touchend', onDragEnd);
+  }
+
+  function onDragStart(e) {
+    isDrag = true;
+    dragX = (e.clientX !== undefined) ? e.clientX : e.touches[0].clientX;
+    e.preventDefault();
+  }
+
+  function onDragMove(e) {
+    if (!isDrag) return;
+    const x = (e.clientX !== undefined) ? e.clientX : e.touches[0].clientX;
+    globalRot += (x - dragX) * 0.012;
+    dragX = x;
+    if (modelLeft) modelLeft.render();
+    if (modelRight) modelRight.render();
+    e.preventDefault();
+  }
+
+  function onDragEnd() { isDrag = false; }
+
+  // Initialize drag on page load
+  document.addEventListener('DOMContentLoaded', initDrag);
+
+  // ─── GENERATE ───────────────────────────────────────────────────────────────
+
+  function generate() {
+    // Read raw input values
+    let height   = parseFloat(document.getElementById('height').value)   || PLACEHOLDERS[unitSystem].height;
+    let weight   = parseFloat(document.getElementById('weight').value)   || PLACEHOLDERS[unitSystem].weight;
+    let waist    = parseFloat(document.getElementById('waist').value)    || PLACEHOLDERS[unitSystem].waist;
+    let hips     = parseFloat(document.getElementById('hips').value)     || PLACEHOLDERS[unitSystem].hips;
+    let arms     = parseFloat(document.getElementById('arms').value)     || PLACEHOLDERS[unitSystem].arms;
+    let thighs   = parseFloat(document.getElementById('thighs').value)   || PLACEHOLDERS[unitSystem].thighs;
+    let forearms = parseFloat(document.getElementById('forearms').value) || PLACEHOLDERS[unitSystem].forearms;
+    let calves   = parseFloat(document.getElementById('calves').value)   || PLACEHOLDERS[unitSystem].calves;
+    let protein  = parseFloat(document.getElementById('protein').value)  || PLACEHOLDERS[unitSystem].protein;
+    let water    = parseFloat(document.getElementById('water').value)    || PLACEHOLDERS[unitSystem].water;
+    const currentFreq = parseInt(document.getElementById('current-freq').value);
+
+    // Lifestyle inputs
+    const age      = parseInt(document.getElementById('age').value)      || 35;
+    const sleep    = parseFloat(document.getElementById('sleep').value)  || 7;
+    const stress   = document.getElementById('stress').value;
+    const activity = document.getElementById('activity').value;
+
+    // Convert to imperial for internal calculations
+    if (unitSystem === 'metric') {
+      height   = cmToIn(height);
+      weight   = kgToLb(weight);
+      waist    = cmToIn(waist);
+      hips     = cmToIn(hips);
+      arms     = cmToIn(arms);
+      thighs   = cmToIn(thighs);
+      forearms = cmToIn(forearms);
+      calves   = cmToIn(calves);
+      water    = water / 29.5735;
+    }
+
+    const measurements = { weight, waist, hips, arms, thighs, forearms, calves, height };
+    const nutrition = { protein, water };
+    const lifestyle = { age, sleep, stress, activity };
+    const proj = calcProjections(measurements, currentFreq, planFreq, timeframe, nutrition, lifestyle);
+
+    // Calculate BMI and BRI for both states
+    const bmiBaseline  = calcBMI(weight, height);
+    const bmiNoAction  = calcBMI(proj.noAction.weight, height);
+    const bmiWithPlan  = calcBMI(proj.withPlan.weight, height);
+    const briBaseline  = calcBRI(waist, height);
+    const briNoAction  = calcBRI(proj.noAction.waist, height);
+    const briWithPlan  = calcBRI(proj.withPlan.waist, height);
+
+    // Render 3D figures
+    if (!modelLeft) {
+      modelLeft = new BodyModel3D('canvas-no-action', 'red');
+      modelRight = new BodyModel3D('canvas-with-plan', 'green');
+    }
+    modelLeft.scheme = 'red';
+    modelRight.scheme = 'green';
+    modelLeft.build(proj.noAction, selectedZones);
+    modelRight.build(proj.withPlan, selectedZones);
+
+    // Stats — convert back to display units
+    const lengthUnit = unitSystem === 'imperial' ? '"' : ' cm';
+    const weightUnit = unitSystem === 'imperial' ? ' lbs' : ' kg';
+
+    function disp(val, type) {
+      if (unitSystem === 'metric') {
+        return type === 'weight' ? lbToKg(val) : inToCm(val);
+      }
+      return val;
+    }
+
+    function renderStats(el, m, bmi, bri) {
+      const briCat = getBRICategory(bri);
+      el.innerHTML = `
+        <div class="stat-box">
+          <div class="stat-val">${disp(m.weight, 'weight').toFixed(0)}${weightUnit}</div>
+          <div class="stat-lbl">Weight</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">${bmi.toFixed(1)}</div>
+          <div class="stat-lbl">BMI</div>
+        </div>
+        <div class="stat-box" style="background: ${briCat.color}15; border: 1px solid ${briCat.color}40;">
+          <div class="stat-val" style="color: ${briCat.color};">${bri.toFixed(2)}</div>
+          <div class="stat-lbl">
+            BRI · ${briCat.label}<span class="info-icon" onclick="toggleTooltip(event, this)">i<span class="tooltip">
+              <strong>Body Roundness Index</strong>
+              Uses waist + height to estimate body fat distribution and metabolic risk. More accurate than BMI because it accounts for <em>where</em> fat is stored, not just total weight.
+              <div class="bri-scale">
+                Under 3.41 · Lean<br>
+                3.41–4.45 · Average<br>
+                4.45–5.46 · Above Avg<br>
+                5.46–6.91 · High<br>
+                Over 6.91 · Very High
+              </div>
+            </span></span>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">${disp(m.waist, 'length').toFixed(1)}${lengthUnit}</div>
+          <div class="stat-lbl">Waist</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">${disp(m.hips, 'length').toFixed(1)}${lengthUnit}</div>
+          <div class="stat-lbl">Hips</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">${disp(m.thighs, 'length').toFixed(1)}${lengthUnit}</div>
+          <div class="stat-lbl">Thighs</div>
+        </div>
+      `;
+    }
+
+    renderStats(document.getElementById('stats-no-action'), proj.noAction, bmiNoAction, briNoAction);
+    renderStats(document.getElementById('stats-with-plan'), proj.withPlan, bmiWithPlan, briWithPlan);
+
+    // Subtitles
+    const freqLabels = {0:'no training', 1:'1x/week', 2:'2x/week', 3:'3x/week', 4:'4x/week', 5:'5x/week'};
+    document.getElementById('no-action-sub').textContent = `At current rate · ${freqLabels[currentFreq]}`;
+    document.getElementById('with-plan-sub').textContent = `Structured SISS · ${planFreq}x/week`;
+
+    // Insight bar — show in active unit system
+    const weightDiff = proj.noAction.weight - proj.withPlan.weight;
+    const waistDiff  = proj.noAction.waist  - proj.withPlan.waist;
+    const freqImpact = ((planFreq / Math.max(currentFreq, 1)) * 100 - 100).toFixed(0);
+
+    const weightDiffDisp = unitSystem === 'metric' ? lbToKg(weightDiff) : weightDiff;
+    const waistDiffDisp  = unitSystem === 'metric' ? inToCm(waistDiff) : waistDiff;
+
+    document.getElementById('insight-weight-diff').textContent = `+${weightDiffDisp.toFixed(1)}${weightUnit}`;
+    document.getElementById('insight-waist-diff').textContent  = `${waistDiffDisp.toFixed(1)}${lengthUnit}`;
+    document.getElementById('insight-freq-impact').textContent = currentFreq === 0 ? 'New start' : `${freqImpact > 0 ? '+' : ''}${freqImpact}%`;
+
+    // Timeline badge
+    document.getElementById('timeline-badge').textContent = timeframeLabel;
+
+    // Lifestyle profile snapshot
+    const stressLabels = { 'low': 'Low', 'moderate': 'Moderate', 'high': 'High', 'very-high': 'Very High' };
+    const activityLabels = { 'sedentary': 'Sedentary', 'light': 'Lightly Active', 'moderate': 'Moderately Active', 'very': 'Very Active' };
+    document.getElementById('lifestyle-profile').innerHTML = `
+      <div class="profile-item">
+        <div class="profile-val">${age}</div>
+        <div class="profile-lbl">Age</div>
+      </div>
+      <div class="profile-item">
+        <div class="profile-val">${sleep}h</div>
+        <div class="profile-lbl">Sleep / Night</div>
+      </div>
+      <div class="profile-item">
+        <div class="profile-val">${stressLabels[stress]}</div>
+        <div class="profile-lbl">Stress</div>
+      </div>
+      <div class="profile-item">
+        <div class="profile-val">${activityLabels[activity]}</div>
+        <div class="profile-lbl">Activity</div>
+      </div>
+    `;
+
+    // Print meta — client name and date
+    const clientName = document.getElementById('client-name').value.trim() || 'Client';
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('meta-name').textContent = clientName;
+    document.getElementById('meta-date').textContent = today;
+
+    // Coach's 6-Month Outlook
+    const outlookText = document.getElementById('six-month-outlook').value.trim();
+    const outlookCard = document.getElementById('outlook-card');
+    if (outlookText) {
+      document.getElementById('outlook-content').textContent = outlookText;
+      outlookCard.style.display = 'block';
+    } else {
+      outlookCard.style.display = 'none';
+    }
+
+    // Coach notes
+    const notesText = document.getElementById('coach-notes').value.trim();
+    const notesDisplay = document.getElementById('notes-display');
+    if (notesText) {
+      document.getElementById('notes-content').textContent = notesText;
+      notesDisplay.style.display = 'block';
+    } else {
+      notesDisplay.style.display = 'none';
+    }
+
+    // Enable print button
+    document.getElementById('print-btn').disabled = false;
+
+    // Show results
+    document.getElementById('empty-state').style.display = 'none';
+    const resultsEl = document.getElementById('results');
+    resultsEl.style.display = 'flex';
+  }
+
+  // ─── DEMO PRESETS ────────────────────────────────────────────────────────
+  // Archetypes that map to common patterns in Paris's target audience
+  // All measurements stored in imperial (auto-converts to metric on apply)
+  const PRESETS = {
+    highAchiever: {
+      name: 'Sample · High-Achieving Overworker',
+      age: 36,
+      activity: 'sedentary',
+      sleep: 5.5,
+      stress: 'high',
+      currentFreq: '1',
+      height: 65, weight: 168, waist: 36, hips: 41,
+      arms: 13.5, thighs: 24, forearms: 10, calves: 14,
+      protein: 65, water: 32,
+      zones: ['belly', 'waist', 'hips', 'back'],
+      planFreq: 3,
+      timeframe: 6, timeframeLabel: '6 Month Outlook'
+    },
+    perimenopausal: {
+      name: 'Sample · Perimenopausal Plateau',
+      age: 47,
+      activity: 'light',
+      sleep: 6.5,
+      stress: 'moderate',
+      currentFreq: '3',
+      height: 64, weight: 158, waist: 33.5, hips: 42,
+      arms: 13, thighs: 23.5, forearms: 10, calves: 14,
+      protein: 85, water: 48,
+      zones: ['belly', 'hips', 'thighs'],
+      planFreq: 3,
+      timeframe: 6, timeframeLabel: '6 Month Outlook'
+    },
+    overtrainer: {
+      name: 'Sample · Burnout Overtrainer',
+      age: 32,
+      activity: 'very',
+      sleep: 5.5,
+      stress: 'very-high',
+      currentFreq: '5',
+      height: 66, weight: 142, waist: 28.5, hips: 37.5,
+      arms: 12, thighs: 21.5, forearms: 9.5, calves: 13.5,
+      protein: 95, water: 56,
+      zones: ['belly', 'arms'],
+      planFreq: 4,
+      timeframe: 6, timeframeLabel: '6 Month Outlook'
+    },
+    beginner: {
+      name: 'Sample · Starting From Zero',
+      age: 41,
+      activity: 'light',
+      sleep: 7,
+      stress: 'moderate',
+      currentFreq: '0',
+      height: 65, weight: 178, waist: 37.5, hips: 44,
+      arms: 14, thighs: 25, forearms: 10.5, calves: 14.5,
+      protein: 60, water: 40,
+      zones: ['belly', 'waist', 'hips', 'thighs', 'arms'],
+      planFreq: 2,
+      timeframe: 6, timeframeLabel: '6 Month Outlook'
+    }
+  };
+
+  function applyPreset(presetKey) {
+    const p = PRESETS[presetKey];
+    if (!p) return;
+
+    // Conversion helpers based on current unit system
+    const convLen = (v) => unitSystem === 'metric' ? inToCm(v).toFixed(1) : v;
+    const convWt = (v) => unitSystem === 'metric' ? lbToKg(v).toFixed(1) : v;
+    const convWater = (v) => unitSystem === 'metric' ? (v * 29.5735).toFixed(0) : v;
+
+    // Client info
+    document.getElementById('client-name').value = p.name;
+    document.getElementById('age').value = p.age;
+    document.getElementById('activity').value = p.activity;
+
+    // Measurements
+    document.getElementById('height').value   = convLen(p.height);
+    document.getElementById('weight').value   = convWt(p.weight);
+    document.getElementById('waist').value    = convLen(p.waist);
+    document.getElementById('hips').value     = convLen(p.hips);
+    document.getElementById('arms').value     = convLen(p.arms);
+    document.getElementById('thighs').value   = convLen(p.thighs);
+    document.getElementById('forearms').value = convLen(p.forearms);
+    document.getElementById('calves').value   = convLen(p.calves);
+
+    // Training + lifestyle
+    document.getElementById('current-freq').value = p.currentFreq;
+    document.getElementById('sleep').value = p.sleep;
+    document.getElementById('stress').value = p.stress;
+
+    // Nutrition
+    document.getElementById('protein').value = p.protein;
+    document.getElementById('water').value = convWater(p.water);
+
+    // Fat zones — clear all and apply preset's zones
+    selectedZones.clear();
+    document.querySelectorAll('.zone-chip').forEach(chip => chip.classList.remove('active'));
+    p.zones.forEach(zone => {
+      selectedZones.add(zone);
+      document.querySelectorAll('.zone-chip').forEach(chip => {
+        const onclick = chip.getAttribute('onclick') || '';
+        if (onclick.includes(`'${zone}'`)) chip.classList.add('active');
+      });
+    });
+
+    // Plan frequency
+    planFreq = p.planFreq;
+    document.getElementById('plan-freq').value = p.planFreq;
+    document.getElementById('freq-display').innerHTML = `${p.planFreq} <span>days/week</span>`;
+
+    // Timeframe → 6 months default for all presets (consistent for demos)
+    timeframe = p.timeframe;
+    timeframeLabel = p.timeframeLabel;
+    document.querySelectorAll('.timeframe-pills .pill').forEach(pill => {
+      pill.classList.remove('active');
+      if (pill.textContent.trim() === '6 Months') pill.classList.add('active');
+    });
+
+    // Clear coach notes and outlook from prior session
+    document.getElementById('coach-notes').value = '';
+    document.getElementById('six-month-outlook').value = '';
+
+    // Update targets
+    updateTargets();
+
+    // Auto-generate the projection for instant demo
+    generate();
+
+    // Auto-draft the outlook to complete the demo experience
+    autoGenerateOutlook();
+  }
+
+  // ─── AUTO-GENERATE 6-MONTH OUTLOOK ───────────────────────────────────────
+  // Drafts a personalized outlook in Coach Paris's voice based on inputs
+  function autoGenerateOutlook() {
+    // Pull all current inputs
+    const clientName = document.getElementById('client-name').value.trim().split(' ')[0] || 'You';
+    const age = parseInt(document.getElementById('age').value) || 35;
+    const sleep = parseFloat(document.getElementById('sleep').value) || 7;
+    const stress = document.getElementById('stress').value;
+    const activity = document.getElementById('activity').value;
+    const currentFreq = parseInt(document.getElementById('current-freq').value);
+
+    let weightVal = parseFloat(document.getElementById('weight').value) || PLACEHOLDERS[unitSystem].weight;
+    let waistVal = parseFloat(document.getElementById('waist').value) || PLACEHOLDERS[unitSystem].waist;
+    let heightVal = parseFloat(document.getElementById('height').value) || PLACEHOLDERS[unitSystem].height;
+    let protein = parseFloat(document.getElementById('protein').value) || PLACEHOLDERS[unitSystem].protein;
+
+    // Convert to imperial for calc
+    if (unitSystem === 'metric') {
+      weightVal = kgToLb(weightVal);
+      waistVal = cmToIn(waistVal);
+      heightVal = cmToIn(heightVal);
+    }
+
+    const proteinTarget = Math.round(weightVal * 0.9);
+    const proteinMin = Math.round(weightVal * 0.8);
+    const proteinMax = Math.round(weightVal * 1.0);
+
+    // Run a 6-month projection for outlook math (always 6 months regardless of selected timeframe)
+    const measurements = {
+      weight: weightVal, waist: waistVal, height: heightVal,
+      hips: parseFloat(document.getElementById('hips').value) || PLACEHOLDERS[unitSystem].hips,
+      arms: parseFloat(document.getElementById('arms').value) || PLACEHOLDERS[unitSystem].arms,
+      thighs: parseFloat(document.getElementById('thighs').value) || PLACEHOLDERS[unitSystem].thighs,
+      forearms: parseFloat(document.getElementById('forearms').value) || PLACEHOLDERS[unitSystem].forearms,
+      calves: parseFloat(document.getElementById('calves').value) || PLACEHOLDERS[unitSystem].calves,
+    };
+    if (unitSystem === 'metric') {
+      ['hips','arms','thighs','forearms','calves'].forEach(k => measurements[k] = cmToIn(measurements[k]));
+    }
+
+    const waterVal = unitSystem === 'metric'
+      ? (parseFloat(document.getElementById('water').value) || PLACEHOLDERS[unitSystem].water) / 29.5735
+      : (parseFloat(document.getElementById('water').value) || PLACEHOLDERS[unitSystem].water);
+
+    const sixMonthProj = calcProjections(
+      measurements, currentFreq, planFreq, 6,
+      { protein, water: waterVal },
+      { age, sleep, stress, activity }
+    );
+
+    // Calculate the differences
+    const waistDiff = (waistVal - sixMonthProj.withPlan.waist);
+    const weightDiff = (weightVal - sixMonthProj.withPlan.weight);
+    const briNow = calcBRI(waistVal, heightVal);
+    const briFuture = calcBRI(sixMonthProj.withPlan.waist, heightVal);
+    const briCatNow = getBRICategory(briNow);
+    const briCatFuture = getBRICategory(briFuture);
+
+    // Display values (convert back to user's unit system)
+    const waistDiffDisp = unitSystem === 'metric'
+      ? `${inToCm(waistDiff).toFixed(1)} cm`
+      : `${waistDiff.toFixed(1)} inches`;
+    const weightDiffDisp = unitSystem === 'metric'
+      ? `${lbToKg(weightDiff).toFixed(1)} kg`
+      : `${weightDiff.toFixed(1)} lbs`;
+
+    // ── BUILD THE OUTLOOK PARAGRAPH ──
+
+    // 1. OPENING — life stage + age context
+    let opening;
+    if (age < 30) {
+      opening = `At ${age}, you're in a metabolic window where consistent, structured inputs compound quickly — but only when your nervous system has the capacity to receive them.`;
+    } else if (age < 40) {
+      opening = `At ${age}, the way your body responds to training is shifting. Recovery and stress regulation now carry more weight than they did five years ago — and that's actually good news, because it means precision matters more than intensity.`;
+    } else if (age < 50) {
+      opening = `At ${age}, you're in a perimenopausal window. Hormonal fluctuations are real, and the "eat less, train more" approach that may have worked in your 30s is now actively counterproductive. The work shifts to building capacity, not depleting it.`;
+    } else if (age < 60) {
+      opening = `At ${age}, strength training isn't optional — it's the foundation of metabolic health, bone density, and the quality of your next 30 years. This is the most important investment in your body you'll make.`;
+    } else {
+      opening = `At ${age}, every session is an investment in your independence, mobility, and metabolic resilience. The goal isn't aesthetic — it's longevity and the ability to live in your body fully.`;
+    }
+
+    // 2. CURRENT STATE — assess what's working and what's not
+    let assessment = '';
+    const issues = [];
+    const strengths = [];
+
+    if (currentFreq === 0) issues.push('your body isn\'t currently receiving the mechanical stimulus it needs to change composition');
+    else if (currentFreq <= 2) issues.push(`your current ${currentFreq}x/week routine is a foundation, but not enough volume for sustained adaptation`);
+    else strengths.push(`you already have a ${currentFreq}x/week training base to build on`);
+
+    if (protein < proteinMin * 0.8) issues.push(`protein intake is well below target at ${protein}g (you need ${proteinMin}-${proteinMax}g daily)`);
+    else if (protein < proteinMin) issues.push(`protein at ${protein}g is close but not yet at target (${proteinMin}-${proteinMax}g)`);
+    else strengths.push(`protein intake at ${protein}g is hitting target`);
+
+    if (sleep < 6) issues.push(`sleep at ${sleep} hours is creating chronic cortisol load that will fight every training adaptation`);
+    else if (sleep < 7) issues.push(`sleep at ${sleep} hours is below the recovery threshold your body needs`);
+    else strengths.push(`sleep at ${sleep} hours is supporting recovery`);
+
+    if (stress === 'high' || stress === 'very-high') {
+      issues.push('your stress load is currently dominant — no training program outworks chronic dysregulation');
+    }
+
+    if (activity === 'sedentary') {
+      issues.push('a sedentary baseline means you\'re relying entirely on workouts for stimulus');
+    }
+
+    if (issues.length > 0 && strengths.length > 0) {
+      assessment = `Here's what I'm seeing in your baseline: ${strengths.join(' and ')}. At the same time, ${issues.slice(0, 2).join(', and ')}. That's the honest starting point.`;
+    } else if (issues.length > 0) {
+      assessment = `Here's the honest baseline: ${issues.slice(0, 2).join(', and ')}. That isn't a judgment — it's the data we need to work with.`;
+    } else {
+      assessment = `Your baseline is genuinely strong: ${strengths.join(', and ')}. The work ahead is refinement and progression, not foundational repair.`;
+    }
+
+    // 3. PROJECTION — specific numbers
+    const briShiftLine = briCatNow.label !== briCatFuture.label
+      ? `, with your BRI shifting from ${briCatNow.label} to ${briCatFuture.label} (a meaningful health-marker change, not just a cosmetic one)`
+      : `, with measurable improvements in your BRI score and waist-to-height ratio`;
+
+    let projectionText;
+    if (weightDiff > 0.5) {
+      projectionText = `With ${planFreq}x/week structured training, protein consistently in the ${proteinMin}-${proteinMax}g range, and the recovery pillars in place, the realistic 6-month outlook is a ${waistDiffDisp} reduction in waist circumference and roughly ${weightDiffDisp} of body recomposition${briShiftLine}.`;
+    } else {
+      projectionText = `With ${planFreq}x/week structured training and the recovery pillars in place, the realistic 6-month outlook is a ${waistDiffDisp} reduction in waist circumference${briShiftLine} — alongside meaningful strength gains in compound movements.`;
+    }
+
+    // 4. PILLAR FOCUS — biggest leverage point
+    let pillarFocus;
+    if (sleep < 7 && (stress === 'high' || stress === 'very-high')) {
+      pillarFocus = `Your primary lever isn't more training — it's Predictable Recovery. Until your sleep and stress regulate, your nervous system won't trust that it can let go of what it's holding (especially around your midsection).`;
+    } else if (stress === 'high' || stress === 'very-high') {
+      pillarFocus = `Stress Awareness is the gatekeeper here. Your nervous system needs to feel safe before it'll release stored fat — particularly visceral fat, which BRI is actually measuring.`;
+    } else if (sleep < 7) {
+      pillarFocus = `Predictable Recovery is your biggest unlocked variable. Sleep isn't passive — it's where adaptation actually happens. Adding even 45 minutes nightly will compound everything else.`;
+    } else if (protein < proteinMin) {
+      pillarFocus = `The fastest, cheapest fix in your plan is hitting your protein target consistently. Without ${proteinMin}-${proteinMax}g daily, you're training without the building blocks to recompose.`;
+    } else if (currentFreq < 2) {
+      pillarFocus = `Structured Strength is foundational here. Your body needs progressive mechanical stimulus before nutrition or recovery work compounds. ${planFreq}x/week is the minimum effective dose.`;
+    } else {
+      pillarFocus = `Capacity-Based Training is what separates results from burnout. ${planFreq}x/week with the SISS system means matching intensity to your actual recovery capacity each session — not what your calendar says you should be doing.`;
+    }
+
+    // 5. CLOSING — brand reframe
+    const closings = [
+      `This isn't about chasing a number on the scale. It's about building infrastructure your body can sustain — where the composition changes are a byproduct, not the goal.`,
+      `Six months is enough time to make this a foundation, not an event. The work isn't more discipline — it's a system your nervous system can actually trust.`,
+      `The body changes are real, but they're downstream of what we're actually building: a relationship between you and your body where consistency isn't dependent on motivation.`,
+    ];
+    const closing = closings[Math.floor(Math.random() * closings.length)];
+
+    // Assemble
+    const draft = `${clientName === 'You' ? '' : `${clientName} — `}${opening}\n\n${assessment}\n\n${projectionText}\n\n${pillarFocus}\n\n${closing}`;
+
+    document.getElementById('six-month-outlook').value = draft;
+  }
+
+  // ─── PRINT / SAVE ─────────────────────────────────────────────────────────
+  function printSummary() {
+    // Update document title so the saved PDF is named after the client
+    const clientName = document.getElementById('client-name').value.trim() || 'Client';
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+    const originalTitle = document.title;
+    document.title = `${clientName} — SISS Consultation ${today}`;
+    window.print();
+    setTimeout(() => { document.title = originalTitle; }, 500);
+  }
+
+  // ─── RESET ────────────────────────────────────────────────────────────────
+  function resetForm() {
+    if (!confirm('Clear all inputs and start a new consultation?')) return;
+    document.querySelectorAll('.sidebar input[type="number"], .sidebar input[type="text"], .sidebar textarea').forEach(el => el.value = '');
+    document.getElementById('stress').value = 'moderate';
+    document.getElementById('activity').value = 'light';
+    document.getElementById('current-freq').value = '2';
+    selectedZones.clear();
+    document.querySelectorAll('.zone-chip.active').forEach(c => c.classList.remove('active'));
+    document.getElementById('plan-freq').value = 3;
+    document.getElementById('freq-display').innerHTML = '3 <span>days/week</span>';
+    planFreq = 3;
+    document.getElementById('print-btn').disabled = true;
+    document.getElementById('empty-state').style.display = 'flex';
+    document.getElementById('results').style.display = 'none';
+    updateTargets();
+  }
+  // Tooltip tap handler (mobile-friendly)
+  function toggleTooltip(event, el) {
+    event.stopPropagation();
+    // Close all other open tooltips
+    document.querySelectorAll('.info-icon.show-tooltip').forEach(i => {
+      if (i !== el) i.classList.remove('show-tooltip');
+    });
+    el.classList.toggle('show-tooltip');
+  }
+
+  // Close tooltip when clicking elsewhere
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.info-icon.show-tooltip').forEach(i => i.classList.remove('show-tooltip'));
+  });
+
+  // Initialize on load
+  window.addEventListener('DOMContentLoaded', () => {
+    updateTargets();
+  });
+</script>
+</body>
+</html>
